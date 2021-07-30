@@ -1,0 +1,156 @@
+{
+  "db": "PostgreSQL",
+  "377b84a56a2c586045fad450eacce86134d9bbebeeb34ff5bdbd67d6b2bd44c0": {
+    "query": "delete from nd.auth_tokens where user_id = $1 and expires <= now()",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Int8"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "38713ee82ae8a9f4a98a76c7ea33aaa5585bafe74e16420ed48f367f181d79e9": {
+    "query": "\n        insert into nd.auth_tokens\n            (signature, user_id, expires) values ($1, $2, $3)\n        returning *\n        ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int8"
+        },
+        {
+          "ordinal": 1,
+          "name": "created",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 2,
+          "name": "modified",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 3,
+          "name": "expires",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 4,
+          "name": "user_id",
+          "type_info": "Int8"
+        },
+        {
+          "ordinal": 5,
+          "name": "signature",
+          "type_info": "Text"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Int8",
+          "Timestamptz"
+        ]
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "c7d8abb3b94797737fb20abfb1297b899170b69538f6c6bfe78b1de94694a667": {
+    "query": "\n        insert into nd.users\n            (name, email) values ($1, $2)\n        on conflict (email) do update\n            set modified = now(),\n                name = $1\n        returning *\n        ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int8"
+        },
+        {
+          "ordinal": 1,
+          "name": "created",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 2,
+          "name": "modified",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 3,
+          "name": "name",
+          "type_info": "Text"
+        },
+        {
+          "ordinal": 4,
+          "name": "email",
+          "type_info": "Text"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text"
+        ]
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "f82e911f11cf846c8b12d30a4e981e5e437ebd91fd35055118f11fa8b641ac33": {
+    "query": "\n                select u.*\n                from nd.auth_tokens t\n                    inner join nd.users u\n                    on u.id = t.user_id\n                where signature = $1\n                ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int8"
+        },
+        {
+          "ordinal": 1,
+          "name": "created",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 2,
+          "name": "modified",
+          "type_info": "Timestamptz"
+        },
+        {
+          "ordinal": 3,
+          "name": "name",
+          "type_info": "Text"
+        },
+        {
+          "ordinal": 4,
+          "name": "email",
+          "type_info": "Text"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  }
+}
