@@ -16,3 +16,13 @@
   environment variable at compile time to validate database queries.
 * `cargo sqlx prepare` to update the sqlx-data.json file
 
+```
+# as postgres user
+# psql
+create database nd;
+create user nd with encrypted password 'nd';
+grant all on database nd to nd;
+
+# psql -d nd
+create extension pg_trgm;
+```

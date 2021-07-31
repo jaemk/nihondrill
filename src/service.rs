@@ -33,6 +33,7 @@ pub async fn start(pool: sqlx::PgPool) -> crate::Result<()> {
     let mut app = tide::with_state(ctx);
     app.at("/").all(index);
     app.at("/status").all(status);
+    //app.at("/api/v1/question/new").all(new_question);
     app.with(crate::logging::LogMiddleware::new());
 
     slog::info!(LOG, "running at {}", crate::CONFIG.host());
