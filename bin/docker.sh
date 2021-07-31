@@ -24,10 +24,10 @@ else
     done
 fi
 
-# set key-value pairs if there's an .env.local
+# set key-value pairs if there's a .env
 if [[ -z "$ENVFILE" ]]; then
-    if [ -d .env.local ]; then
-        envfile="--env-file .env.local"
+    if [ -f .env ]; then
+        envfile="--env-file .env"
     fi
 else
     envfile="--env-file $ENVFILE"

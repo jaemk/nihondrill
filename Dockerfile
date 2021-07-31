@@ -1,4 +1,4 @@
-FROM rust:1.52 as builder
+FROM rust:1.53 as builder
 
 RUN cargo install migrant --features postgres
 
@@ -28,15 +28,18 @@ COPY ./.git ./.git
 # make sure there's no trailing newline
 RUN git rev-parse HEAD | awk '{ printf "%s", $0 >"commit_hash.txt" }'
 RUN rm -rf ./.git
+RUN which migrant
 
 # package
 FROM debian:buster-slim
+RUN apt-get update --yes && apt-get install openssl --yes
 RUN mkdir /nihondrill
 WORKDIR /nihondrill
 
 COPY ./bin ./bin
 COPY --from=builder /nihondrill/target/release/nihondrill ./bin/nihondrill
 COPY --from=builder /nihondrill/commit_hash.txt ./commit_hash.txt
+COPY --from=builder /usr/local/cargo/bin/migrant /usr/bin/migrant
 
 # copy all static files
 COPY ./Migrant.toml ./Migrant.toml
